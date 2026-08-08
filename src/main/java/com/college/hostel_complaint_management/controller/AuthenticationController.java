@@ -1,9 +1,12 @@
 package com.college.hostel_complaint_management.controller;
 
 import com.college.hostel_complaint_management.dto.UserRegistrationDto;
+import com.college.hostel_complaint_management.service.RegistrationResult;
 import com.college.hostel_complaint_management.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,35 +35,38 @@ public class AuthenticationController {
 
     @GetMapping("/register")
     public String showRegistrationPage(Model model) {
-        model.addAttribute("user", new UserRegistrationDto());
+
+        UserRegistrationDto dto=new UserRegistrationDto();
+
+        model.addAttribute("user",dto );
         return "register";
     }
 
 
     @PostMapping("/register")
     public String registerUser(
-            @ModelAttribute("user") UserRegistrationDto registrationDto,
+           @Valid @ModelAttribute("user") UserRegistrationDto registrationDto,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
+        if(bindingResult.hasErrors()){
+            return  "register";
+        }
 
-      try{
-          userService.registerUser(registrationDto);
 
-          redirectAttributes.addFlashAttribute(
-                  "success",
-                  "Registration successful. Please login."
-          );
+        if(!registrationDto.getConfirmPassword().equals(registrationDto.getPassword())){
+            bindingResult.rejectValue("confirmPassword",null,"password mismatch");
+            return "register";
 
-          return "redirect:/login";
+        }
+        RegistrationResult result=userService.registerUser(registrationDto);
 
-      }
-      catch (Exception e){
+        if(result==RegistrationResult.EMAIL_EXISTS){
+            bindingResult.rejectValue("email",null,"email already exist");
+            return "register";
+        }
 
-          redirectAttributes.addFlashAttribute("error",
-                  e.getMessage());
-
-          return  "redirect:/login";
-
-      }
+            redirectAttributes.addFlashAttribute("success","user Successfully Register");
+            return  "redirect:/login";
 
 
     }

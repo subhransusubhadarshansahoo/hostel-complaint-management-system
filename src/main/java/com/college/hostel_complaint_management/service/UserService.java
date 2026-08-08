@@ -4,6 +4,6 @@ import com.college.hostel_complaint_management.dto.UserRegistrationDto;
 
 public interface UserService {
 
-    void registerUser(UserRegistrationDto registrationDto);
+    RegistrationResult registerUser(UserRegistrationDto registrationDto);
 
 }

@@ -6,6 +6,7 @@ import com.college.hostel_complaint_management.entity.User;
 import com.college.hostel_complaint_management.repository.RoleRepository;
 import com.college.hostel_complaint_management.repository.UserRepository;
 
+import com.college.hostel_complaint_management.service.RegistrationResult;
 import com.college.hostel_complaint_management.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,14 +27,13 @@ public class UserServiceImplementation  implements UserService {
     }
 
     @Override
-    public void registerUser(UserRegistrationDto registrationDto) {
+    public RegistrationResult registerUser(UserRegistrationDto registrationDto) {
 
-        if (userRepository.existsByEmail(registrationDto.getEmail())) {
-            throw new RuntimeException("Email already exists");
+        if(userRepository.existsByEmail(registrationDto.getEmail())){
+            return  RegistrationResult.EMAIL_EXISTS;
         }
 
-        if(!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())){
-            throw  new RuntimeException("password mismatch");}
+
         Role studentRole = roleRepository.findByName("STUDENT")
                 .orElseThrow(() -> new RuntimeException("Student role not found"));
 
@@ -50,5 +50,10 @@ public class UserServiceImplementation  implements UserService {
         user.setEnabled(true);
 
         userRepository.save(user);
+
+        return  RegistrationResult.SUCCESS;
     }
-}
+
+
+    }
+
