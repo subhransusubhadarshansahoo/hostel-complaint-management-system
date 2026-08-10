@@ -28,47 +28,55 @@ public class AuthenticationController {
         return "redirect:/login";
     }
 
+    ////--------->IT MAP THE USER TO THE LOGIN PAGE<--------
     @GetMapping("/login")
     public String showLoginPage() {
         return "login";
     }
 
+    ///----> IT SHOW THE USER REGISTRATION FORM<------------
     @GetMapping("/register")
     public String showRegistrationPage(Model model) {
 
-        UserRegistrationDto dto=new UserRegistrationDto();
+        UserRegistrationDto dto = new UserRegistrationDto();
 
-        model.addAttribute("user",dto );
+        model.addAttribute("user", dto);
         return "register";
     }
 
-
+    //   ------->THIS CONTROLLER HANDLING THE USER REGISTRATION <--------
     @PostMapping("/register")
     public String registerUser(
-           @Valid @ModelAttribute("user") UserRegistrationDto registrationDto,
+            @Valid @ModelAttribute("user") UserRegistrationDto registrationDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
-        if(bindingResult.hasErrors()){
-            return  "register";
-        }
-
-
-        if(!registrationDto.getConfirmPassword().equals(registrationDto.getPassword())){
-            bindingResult.rejectValue("confirmPassword",null,"password mismatch");
-            return "register";
-
-        }
-        RegistrationResult result=userService.registerUser(registrationDto);
-
-        if(result==RegistrationResult.EMAIL_EXISTS){
-            bindingResult.rejectValue("email",null,"email already exist");
+        if (bindingResult.hasErrors()) {
             return "register";
         }
 
-            redirectAttributes.addFlashAttribute("success","user Successfully Register");
-            return  "redirect:/login";
+
+        if (!registrationDto.getConfirmPassword().equals(registrationDto.getPassword())) {
+            bindingResult.rejectValue("confirmPassword", null, "password mismatch");
+            return "register";
+
+        }
+        RegistrationResult result = userService.registerUser(registrationDto);
+
+        if (result == RegistrationResult.EMAIL_EXISTS) {
+            bindingResult.rejectValue("email", null, "email already exist");
+            return "register";
+        }
+
+        redirectAttributes.addFlashAttribute("success", "user Successfully Register");
+        return "redirect:/login";
 
 
+    }
+
+
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "welcome";
     }
 
 }
