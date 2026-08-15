@@ -28,6 +28,11 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/register").permitAll()
+
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/staff/**").hasRole("STAFF")
+                        .requestMatchers("/student/**").hasRole("STUDENT")
+
                         .anyRequest().authenticated()
                 )
 
