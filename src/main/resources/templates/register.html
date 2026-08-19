@@ -12,37 +12,55 @@
         th:object="${user}"
         method="post">
 
-    <label>Name</label><br>
+    <label>Name:</label><br>
     <input type="text" th:field="*{name}">
     <div th:if="${#fields.hasErrors('name')}"
          th:errors="*{name}"></div>
 
     <br><br>
 
-    <label>Email</label><br>
+    <label>Email:</label><br>
     <input type="email" th:field="*{email}">
     <div th:if="${#fields.hasErrors('email')}"
          th:errors="*{email}"></div>
     <br><br>
 
-    <label>Phone Number</label><br>
+    <label>Phone Number:</label><br>
     <input type="text" th:field="*{phoneNo}">
     <div th:if="${#fields.hasErrors('phoneNo')}"
          th:errors="*{phoneNo}"></div>
 
     <br><br>
-    <label>Password</label><br>
+    <label>Password:</label><br>
     <input type="password" th:field="*{password}">
     <div th:if="${#fields.hasErrors('password')}"
          th:errors="*{password}"></div>
     <br><br>
 
 
-    <label>confirm password</label><br>
+    <label>confirm password:</label><br>
     <input type="password" th:field="*{confirmPassword}">
     <div th:if="${#fields.hasErrors('confirmPassword')}"
          th:errors="*{confirmPassword}"></div>
     <br><br>
+    <select th:field="*{hostelId}">
+        <option value="">Select Hostel</option>
+
+        <option th:each="hostel : ${hostels}"
+                th:value="${hostel.id}"
+                th:text="${hostel.name}">
+        </option>
+    </select>
+    <div th:if="${#fields.hasErrors('hostelId')}"
+         th:errors="*{hostelId}"></div>
+
+    <br><br>
+    <label>Room NO:</label><br>
+   <input type="text" th:field="*{roomNumber}">
+    <div th:if="${#fields.hasErrors('roomNumber')}"
+         th:errors="*{roomNumber}"></div>
+    <br><br>
+
 
     <button type="submit">
         Register

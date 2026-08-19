@@ -1,4 +1,4 @@
-package com.college.hostel_complaint_management.controller;
+package com.college.hostel_complaint_management.controller.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

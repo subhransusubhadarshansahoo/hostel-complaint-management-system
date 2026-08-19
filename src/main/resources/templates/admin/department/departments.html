@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Department Management</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f5f6f8;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .add-btn {
+            text-decoration: none;
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 6px;
+        }
+
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background-color: #f9fafb;
+        }
+
+        .active {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .disabled {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .success {
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #dcfce7;
+            color: #166534;
+            border-radius: 6px;
+        }
+
+
+
+        .actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.edit-btn,
+.actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-btn {
+    background-color: #2563eb;
+    color: white;
+}
+
+.deactivate-btn {
+    background-color: #dc2626;
+    color: white;
+}
+
+.activate-btn {
+    background-color: #15803d;
+    color: white;
+}
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Departments</h1>
+
+        <a th:href="@{/admin/departments/new}" class="add-btn">
+            + Add Department
+        </a>
+    </div>
+
+    <div th:if="${successMessage}"
+         class="success"
+         th:text="${successMessage}">
+    </div>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr th:each="department : ${departments}">
+
+                <td th:text="${department.id}"></td>
+
+                <td th:text="${department.name}"></td>
+
+                <td>
+                    <span
+                            th:text="${department.active ? 'Active' : 'Disabled'}"
+                            th:class="${department.active ? 'active' : 'disabled'}">
+                    </span>
+                </td>
+
+                <td class="actions">
+
+                  <!--Edit-->
+                    <a th:href="@{/admin/departments/{id}/edit(id=${department.id})}"
+                       class="edit-btn">
+                        Edit
+                    </a>
+
+                    <!-- Activate / Deactivate -->
+                    <form th:action="@{/admin/departments/{id}/toggle(id=${department.id})}"
+                          method="post"
+                          style="display: inline;">
+
+                        <button type="submit"
+                                th:text="${department.active ? 'Deactivate' : 'Activate'}"
+                                th:class="${department.active ? 'deactivate-btn' : 'activate-btn'}">
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(departments)}">
+                <td colspan="4">
+                    No departments found.
+                </td>
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+```

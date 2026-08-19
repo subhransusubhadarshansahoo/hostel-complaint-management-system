@@ -1,9 +1,6 @@
 package com.college.hostel_complaint_management.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,11 +31,20 @@ public class UserRegistrationDto {
     )
     private String phoneNo;
 
+    @NotNull(message = "Please select a hostel")
+    private Long hostelId;
+
+    @NotBlank(message = "Room number is required")
+    private String roomNumber;
+
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must contain at least 8 characters")
     private String password;
 
     @NotBlank(message ="confirm the password")
     private String confirmPassword;
+
+
+
 
 }
