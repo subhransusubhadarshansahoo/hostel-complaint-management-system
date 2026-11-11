@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff</title>
+    <link rel="stylesheet" th:href="@{/css/admin/staff/staffs.css}">
+</head>
+<body>
+
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <div th:replace="~{fragments/back-button :: backButton}"></div>
+            <h1>Staff Members</h1>
+            <p>Manage staff accounts and their departments.</p>
+        </div>
+        <a th:href="@{/admin/staff/new}" class="add-btn">+ Add Staff</a>
+    </div>
+
+    <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
+
+    <div class="table-card">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:if="${#lists.isEmpty(staffList)}">
+                <td colspan="7" class="empty-state">No staff members found.</td>
+            </tr>
+
+            <tr th:each="staff : ${staffList}">
+                <td th:text="${staff.id}"></td>
+                <td th:text="${staff.user.name}"></td>
+                <td th:text="${staff.user.email}"></td>
+                <td th:text="${staff.user.phone}"></td>
+                <td th:text="${staff.department.name}"></td>
+                <td>
+                    <span class="status"
+                          th:classappend="${staff.user.enabled ? ' status-active' : ' status-disabled'}"
+                          th:text="${staff.user.enabled ? 'Active' : 'Disabled'}">
+                    </span>
+                </td>
+                <td class="actions">
+                    <a th:href="@{/admin/staff/{id}/edit(id=${staff.id})}" class="edit-btn">Edit</a>
+
+                    <form th:action="@{/admin/staff/{id}/toggle(id=${staff.id})}" method="post">
+                        <button type="submit"
+                                th:class="${staff.user.enabled ? 'deactivate-btn' : 'activate-btn'}"
+                                th:text="${staff.user.enabled ? 'Deactivate' : 'Activate'}">
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

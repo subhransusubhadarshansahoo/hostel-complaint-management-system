@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${hostel.id == null ? 'Add Hostel' : 'Edit Hostel'}"></title>
+    <link rel="stylesheet" th:href="@{/css/admin/hostel/hostel-form.css}">
+</head>
+<body>
+
+<div class="page-container">
+    <div class="form-card">
+
+        <div class="form-header">
+            <h1 th:text="${hostel.id == null ? 'Add Hostel' : 'Edit Hostel'}"></h1>
+            <p>Define a hostel and its type.</p>
+        </div>
+
+        <form th:action="${hostel.id == null}
+                ? @{/admin/hostels}
+                : @{/admin/hostels/{id}(id=${hostel.id})}"
+              th:object="${hostel}"
+              method="post">
+
+            <div th:if="${#fields.hasGlobalErrors()}" class="server-error">
+                <p th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Hostel Name</label>
+                <input type="text" id="name" th:field="*{name}"
+                       placeholder="Enter hostel name" autocomplete="off">
+                <div class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="type">Hostel Type</label>
+                <select id="type" th:field="*{type}">
+                    <option value="">Select Type</option>
+                    <option value="BOYS">Boys</option>
+                    <option value="GIRLS">Girls</option>
+                </select>
+                <div class="field-error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></div>
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/admin/hostels}" class="cancel-btn">Cancel</a>
+                <button type="submit" class="submit-btn"
+                        th:text="${hostel.id == null ? 'Add Hostel' : 'Update Hostel'}"></button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

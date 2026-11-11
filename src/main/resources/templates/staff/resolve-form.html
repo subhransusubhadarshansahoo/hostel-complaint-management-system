@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Resolution Proof</title>
+
+    <link rel="stylesheet" th:href="@{/css/staff/resolve-complaint.css}">
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <!-- Header -->
+    <header class="topbar">
+
+        <a th:href="@{/staff/dashboard}" class="brand">
+            <div class="brand-icon">H</div>
+
+            <div>
+                <h2>HostelCare</h2>
+                <span>Staff Portal</span>
+            </div>
+        </a>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-button">
+                <span>↗</span> Logout
+            </button>
+        </form>
+
+    </header>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+        <a th:href="@{/staff/my-complaints}" class="back-link">
+            <span>←</span> Back to My Complaints
+        </a>
+
+        <section class="resolve-card">
+
+            <div class="card-heading">
+
+                <div class="heading-icon">✓</div>
+
+                <p class="eyebrow">COMPLAINT MANAGEMENT</p>
+
+                <h1>Submit Proof of Resolution</h1>
+
+                <p class="description">
+                    Upload an image showing that the complaint has been
+                    addressed. The student can then review your resolution.
+                </p>
+
+            </div>
+
+            <div class="instruction-banner">
+                <span class="info-icon">i</span>
+
+                <p>
+                    Please upload a clear image as proof of the completed
+                    work. Make sure the image accurately represents
+                    the resolution.
+                </p>
+            </div>
+
+            <form th:action="@{/staff/complaints/{id}/resolve(id=${complaintId})}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="resolution-form">
+
+                <label for="proofImage" class="upload-label">
+                    Upload resolution image
+                    <span class="optional-label">Optional</span>
+                </label>
+
+                <label for="proofImage" class="upload-area">
+
+                    <div class="upload-icon">↑</div>
+
+                    <strong>Choose an image to upload</strong>
+
+                    <span class="upload-description">
+                        Select an image from your device
+                    </span>
+
+                    <span class="file-types">
+                        Accepted image formats depend on server validation
+                    </span>
+
+                    <span id="fileName" class="selected-file">
+                        No file selected
+                    </span>
+
+                </label>
+
+                <input type="file"
+                       id="proofImage"
+                       name="proofImage"
+                       accept="image/*"
+                       class="file-input">
+
+                <div class="form-actions">
+
+                    <a th:href="@{/staff/my-complaints}" class="cancel-button">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="submit-button">
+                        Submit Resolution
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <footer class="page-footer">
+            HostelCare · Staff Portal
+        </footer>
+
+    </main>
+
+</div>
+
+<script>
+    const proofImageInput = document.getElementById("proofImage");
+    const fileNameDisplay = document.getElementById("fileName");
+
+    proofImageInput.addEventListener("change", function () {
+
+        if (this.files && this.files.length > 0) {
+            fileNameDisplay.textContent = this.files[0].name;
+            fileNameDisplay.classList.add("file-selected");
+        } else {
+            fileNameDisplay.textContent = "No file selected";
+            fileNameDisplay.classList.remove("file-selected");
+        }
+
+    });
+</script>
+
+</body>
+</html>

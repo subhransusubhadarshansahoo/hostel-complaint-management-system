@@ -1,0 +1,24 @@
+package com.college.hostel_complaint_management.service.result;
+
+public enum ComplaintResult {
+
+    SUCCESS,
+    CATEGORY_NOT_FOUND,
+    CATEGORY_INACTIVE,
+    STUDENT_NOT_FOUND,
+    INVALID_IMAGE_TYPE,
+    IMAGE_TOO_LARGE,
+    IMAGE_UPLOAD_FAILED,
+    STAFF_NOT_FOUND,
+    ALREADY_CLAIMED,
+    NOT_YOUR_COMPLAINT,
+    INVALID_STATUS_TRANSITION,
+
+    IMAGE_REQUIRED,
+
+
+    ALREADY_ESCALATED,
+    NOT_YET_ESCALATABLE
+
+
+}

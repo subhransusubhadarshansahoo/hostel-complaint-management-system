@@ -1,0 +1,60 @@
+
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+
+<body>
+
+<div class="error-page">
+
+    <div class="error-container">
+
+        <div class="error-icon">⚠️</div>
+
+        <h1>Something went wrong</h1>
+
+        <p class="error-message"
+           th:text="${errorMessage}">
+            An unexpected error occurred.
+        </p>
+
+        <div class="error-actions">
+
+            <button class="error-btn back-btn"
+                    onclick="history.back()">
+                Go Back
+            </button>
+
+            <a th:if="${role == 'ROLE_ADMIN'}"
+               th:href="@{/admin/dashboard}"
+               class="error-btn dashboard-btn">
+                Dashboard
+            </a>
+
+            <a th:if="${role == 'ROLE_STAFF'}"
+               th:href="@{/staff/dashboard}"
+               class="error-btn dashboard-btn">
+                Dashboard
+            </a>
+
+            <a th:if="${role == 'ROLE_STUDENT'}"
+               th:href="@{/student/dashboard}"
+               class="error-btn dashboard-btn">
+                Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+```

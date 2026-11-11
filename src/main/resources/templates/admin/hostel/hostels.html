@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostels</title>
+    <link rel="stylesheet" th:href="@{/css/admin/hostel/hostels.css}">
+</head>
+<body>
+
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <div th:replace="~{fragments/back-button :: backButton}"></div>
+            <h1>Hostels</h1>
+            <p>Manage hostels available for student registration.</p>
+        </div>
+        <a th:href="@{/admin/hostels/new}" class="add-btn">+ Add Hostel</a>
+    </div>
+
+    <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
+
+    <div class="table-card">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:if="${#lists.isEmpty(hostels)}">
+                <td colspan="5" class="empty-state">No hostels found.</td>
+            </tr>
+
+            <tr th:each="hostel : ${hostels}">
+                <td th:text="${hostel.id}"></td>
+                <td th:text="${hostel.name}"></td>
+                <td th:text="${hostel.type}"></td>
+                <td>
+                    <span class="status"
+                          th:classappend="${hostel.active ? ' status-active' : ' status-disabled'}"
+                          th:text="${hostel.active ? 'Active' : 'Disabled'}">
+                    </span>
+                </td>
+                <td class="actions">
+                    <a th:href="@{/admin/hostels/{id}/edit(id=${hostel.id})}" class="edit-btn">Edit</a>
+
+                    <form th:action="@{/admin/hostels/{id}/toggle(id=${hostel.id})}" method="post">
+                        <button type="submit"
+                                th:class="${hostel.active ? 'deactivate-btn' : 'activate-btn'}"
+                                th:text="${hostel.active ? 'Deactivate' : 'Activate'}">
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

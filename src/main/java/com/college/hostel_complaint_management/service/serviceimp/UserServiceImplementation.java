@@ -44,7 +44,7 @@ public class UserServiceImplementation implements UserService {
    @Transactional
     public RegistrationResult registerUser(UserRegistrationDto registrationDto) {
 
-        if (userRepository.existsByEmail(registrationDto.getEmail())) {
+        if (userRepository.existsByEmailIgnoreCase(registrationDto.getEmail())) {
             return RegistrationResult.EMAIL_EXISTS;
         }
 

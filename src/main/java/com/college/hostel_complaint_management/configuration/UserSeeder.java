@@ -2,7 +2,7 @@ package com.college.hostel_complaint_management.configuration;
 
 import com.college.hostel_complaint_management.entity.Role;
 import com.college.hostel_complaint_management.entity.User;
-import com.college.hostel_complaint_management.exception.RoleNotFoundException;
+import com.college.hostel_complaint_management.exception.ResourceNotFoundException;
 import com.college.hostel_complaint_management.repository.RoleRepository;
 import com.college.hostel_complaint_management.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -27,7 +27,7 @@ public class UserSeeder  implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Role role = roleRepository.findByName("ADMIN")
-                .orElseThrow(() -> new RoleNotFoundException("GIVEN ROLE IS NOT AVAILABLE"));
+                .orElseThrow(() -> new ResourceNotFoundException("GIVEN ROLE IS NOT AVAILABLE"));
         if (!userRepository.existsByRoleId(role.getId())) {
 
             User user = new User();

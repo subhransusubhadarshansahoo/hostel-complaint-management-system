@@ -60,4 +60,12 @@ public class DepartmentService {
 
         return DepartmentResult.SUCCESS;
     }
+
+
+    public  List<Department> getActiveDepartments(){
+
+     List<Department>departments=departmentRepository.findByActiveTrue();
+     return  departments;
+    }
+
 }

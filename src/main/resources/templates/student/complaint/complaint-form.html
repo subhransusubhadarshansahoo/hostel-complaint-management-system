@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Complaint</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/student/complaint/complaint-form.css}">
+
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <div class="form-card">
+
+        <div class="form-header">
+
+            <h1>Submit Complaint</h1>
+
+            <p>
+                Describe your problem and select the
+                appropriate complaint category.
+            </p>
+
+        </div>
+
+
+        <!-- Global Errors -->
+
+
+
+
+        <form th:action="@{/student/complaints}"
+              th:object="${complaint}"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div th:if="${#fields.hasGlobalErrors()}"
+                 class="server-error">
+
+                <p th:each="error : ${#fields.globalErrors()}"
+                   th:text="${error}">
+                </p>
+
+            </div>
+
+
+            <!-- Description -->
+
+            <div class="form-group">
+
+                <label for="description">
+                    Complaint Description
+                </label>
+
+                <textarea id="description"
+                          th:field="*{description}"
+                          placeholder="Describe your problem..."
+                          rows="6"></textarea>
+
+                <div class="field-error"
+                     th:if="${#fields.hasErrors('description')}"
+                     th:errors="*{description}">
+                </div>
+
+            </div>
+
+
+            <!-- Category -->
+
+            <div class="form-group">
+
+                <label for="categoryId">
+                    Complaint Category
+                </label>
+
+                <select id="categoryId"
+                        th:field="*{categoryId}">
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                    <option th:each="category : ${categories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}">
+                    </option>
+
+                </select>
+
+                <div class="field-error"
+                     th:if="${#fields.hasErrors('categoryId')}"
+                     th:errors="*{categoryId}">
+                </div>
+
+            </div>
+
+
+            <!-- Image -->
+
+            <div class="form-group">
+
+                <label for="image">
+                    Image
+                    <span class="optional">(Optional)</span>
+                </label>
+
+                <input type="file"
+                       id="image"
+                       th:field="*{image}"
+                       accept="image/*">
+
+                <p class="help-text">
+                    You can upload one image related to the complaint.
+                </p>
+
+                <div class="field-error"
+                     th:if="${#fields.hasErrors('image')}"
+                     th:errors="*{image}">
+                </div>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div class="form-actions">
+
+                <a th:href="@{/student/dashboard}"
+                   class="cancel-btn">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="submit-btn">
+                    Submit Complaint
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

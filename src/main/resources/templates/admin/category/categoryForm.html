@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${category.id == null
+        ? 'Add Complaint Category'
+        : 'Edit Complaint Category'}">
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin/category/category-form.css}">
+
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <div class="form-card">
+
+        <!-- Dynamic Heading -->
+
+        <div class="form-header">
+
+            <h1 th:text="${category.id == null
+                ? 'Add Complaint Category'
+                : 'Edit Complaint Category'}">
+            </h1>
+
+            <p>
+                Define a complaint category and assign it
+                to the appropriate department.
+            </p>
+
+        </div>
+
+
+        <!-- Dynamic Form Action -->
+
+        <form th:action="${category.id == null}
+                ? @{/admin/categories}
+                : @{/admin/categories/{id}(id=${category.id})}"
+              th:object="${category}"
+              method="post">
+
+
+            <!-- Global Error -->
+
+            <div th:if="${#fields.hasGlobalErrors()}"
+                 class="server-error">
+
+                <p th:each="error : ${#fields.globalErrors()}"
+                   th:text="${error}">
+                </p>
+
+            </div>
+
+
+            <!-- Category Name -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    Category Name
+                </label>
+
+                <input type="text"
+                       id="name"
+                       th:field="*{name}"
+                       placeholder="Enter category name"
+                       autocomplete="off">
+
+                <div class="field-error"
+                     th:if="${#fields.hasErrors('name')}"
+                     th:errors="*{name}">
+                </div>
+
+            </div>
+
+
+            <!-- Department -->
+
+            <div class="form-group">
+
+                <label for="department">
+                    Department
+                </label>
+
+                <select id="department"
+                        th:field="*{department}">
+
+                    <option value="">
+                        Select Department
+                    </option>
+
+                    <option th:each="department : ${departments}"
+                            th:value="${department.id}"
+                            th:text="${department.name}">
+                    </option>
+
+                </select>
+
+                <div class="field-error"
+                     th:if="${#fields.hasErrors('department')}"
+                     th:errors="*{department}">
+                </div>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div class="form-actions">
+
+                <a th:href="@{/admin/categories}"
+                   class="cancel-btn">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="submit-btn"
+                        th:text="${category.id == null
+                            ? 'Add Category'
+                            : 'Update Category'}">
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

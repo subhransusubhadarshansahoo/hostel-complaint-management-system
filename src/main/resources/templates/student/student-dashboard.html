@@ -1,15 +1,379 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Student Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Complaints | HostelCare</title>
+
+    <link rel="stylesheet" th:href="@{/css/student/dashboard/student-dashboard.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
 
-<h1>Student Dashboard</h1>
+<div class="dashboard">
 
-<p>Welcome, Student!</p>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-<a th:href="@{/logout}">Logout</a>
+        <div class="brand">
+            <div class="brand-logo">H<span>.</span></div>
+            <span>HostelCare</span>
+        </div>
+
+        <div class="sidebar-content">
+
+            <p class="sidebar-label">MENU</p>
+
+            <a th:href="@{/student/dashboard}" class="nav-link active">
+                <span class="nav-icon">▦</span>
+                My Complaints
+            </a>
+
+            <a th:href="@{/student/complaints/new}" class="nav-link">
+                <span class="nav-icon">＋</span>
+                Submit Complaint
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-note">
+                <div class="note-icon">✳</div>
+                <p>Have an issue? Let us know. We're here to help.</p>
+            </div>
+
+            <form th:action="@{/logout}" method="post" class="logout-form">
+
+                <button type="submit" class="logout-link">
+                    <span>↗</span>
+                    Logout
+                </button>
+
+            </form>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <p class="breadcrumb">STUDENT PORTAL / DASHBOARD</p>
+                <h1>My Complaints</h1>
+                <p class="page-description">
+                    Track your complaints and stay updated on their progress.
+                </p>
+            </div>
+
+            <a th:href="@{/student/complaints/new}" class="new-complaint-btn">
+                <span>＋</span>
+                Submit New Complaint
+            </a>
+
+        </header>
+
+
+        <!-- SUCCESS MESSAGE -->
+        <div class="success-message" th:if="${successMessage}">
+            <span>✓</span>
+            <p th:text="${successMessage}"></p>
+        </div>
+
+
+        <!-- COMPLAINT SECTION -->
+        <section class="complaints-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Your submitted complaints</h2>
+                    <p>Review the details and current status of your requests.</p>
+                </div>
+
+                <span class="complaint-count"
+                      th:text="${#lists.size(complaints)} + ' complaints'">
+                </span>
+            </div>
+
+
+            <!-- EMPTY STATE -->
+            <div class="empty-state"
+                 th:if="${#lists.isEmpty(complaints)}">
+
+                <div class="empty-icon">▤</div>
+
+                <h3>No complaints yet</h3>
+
+                <p>
+                    You haven't submitted any complaints.
+                    If something needs attention, create your first complaint.
+                </p>
+
+                <a th:href="@{/student/complaints/new}"
+                   class="new-complaint-btn">
+                    ＋ Submit Your First Complaint
+                </a>
+
+            </div>
+
+
+            <!-- COMPLAINT CARDS -->
+            <div class="complaint-list"
+                 th:if="${!#lists.isEmpty(complaints)}">
+
+                <article class="complaint-card"
+                         th:each="complaint : ${complaints}">
+
+                    <!-- CARD HEADER -->
+                    <div class="card-header">
+
+                        <div class="complaint-heading">
+                            <span class="complaint-number"
+                                  th:text="'COMPLAINT #' + ${complaint.id}">
+                            </span>
+
+                            <h3 th:text="${complaint.category.name}">
+                            </h3>
+                        </div>
+
+                        <!-- STATUS BADGES -->
+                        <span class="status-badge"
+                              th:if="${complaint.status.name() == 'PENDING'}">
+                            Pending
+                        </span>
+
+                        <span class="status-badge assigned"
+                              th:if="${complaint.status.name() == 'ASSIGNED'}">
+                            Assigned
+                        </span>
+
+                        <span class="status-badge waiting"
+                              th:if="${complaint.status.name() == 'RESOLUTION_PENDING_CONFIRMATION'}">
+                            Awaiting confirmation
+                        </span>
+
+                        <span class="status-badge resolved"
+                              th:if="${complaint.status.name() == 'RESOLVED'}">
+                            Resolved
+                        </span>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+                    <div class="description-section">
+
+                        <p class="field-label">COMPLAINT DESCRIPTION</p>
+
+                        <p class="complaint-description"
+                           th:text="${complaint.description}">
+                        </p>
+
+                    </div>
+
+
+                    <!-- STAFF DETAILS -->
+                    <div class="staff-section">
+
+                        <p class="field-label">ASSIGNED STAFF</p>
+
+                        <div th:if="${complaint.assignedStaff != null}"
+                             class="staff-details">
+
+                            <div class="staff-avatar">
+                                <span>♙</span>
+                            </div>
+
+                            <div class="staff-info">
+                                <strong th:text="${complaint.assignedStaff.user.name}">
+                                </strong>
+
+                                <span th:text="${complaint.assignedStaff.user.phone}">
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div th:if="${complaint.assignedStaff == null}"
+                             class="unassigned">
+                            <span class="unassigned-dot"></span>
+                            No staff member assigned yet
+                        </div>
+
+                    </div>
+
+
+                    <!-- RESOLUTION IMAGE -->
+                    <div class="resolution-section"
+                         th:if="${complaint.status.name() == 'RESOLUTION_PENDING_CONFIRMATION'}">
+
+                        <div class="resolution-heading">
+                            <span class="resolution-icon">✓</span>
+
+                            <div>
+                                <strong>Staff marked this complaint as resolved</strong>
+                                <p>Please review the submitted proof.</p>
+                            </div>
+                        </div>
+
+                        <div class="resolution-image-area">
+
+                            <button type="button"
+                                    class="image-preview"
+                                    th:if="${complaint.resolutionImagePath != null}"
+                                    th:attr="data-image=@{'/' + ${complaint.resolutionImagePath}}"
+                                    onclick="openImageModal(this.dataset.image)"
+                                    aria-label="View full resolution image">
+
+                                <img th:src="@{'/' + ${complaint.resolutionImagePath}}"
+                                     alt="Proof of complaint resolution"
+                                     loading="lazy">
+
+                                <span class="image-overlay">View image ↗</span>
+
+                            </button>
+
+                            <p class="no-image"
+                               th:if="${complaint.resolutionImagePath == null}">
+                                No resolution image was uploaded.
+                            </p>
+
+                        </div>
+
+                        <div class="confirmation-actions">
+
+                            <form th:action="@{/student/complaints/{id}/confirm(id=${complaint.id})}"
+                                  method="post">
+
+                                <button type="submit" class="confirm-btn">
+                                    ✓ Yes, it's fixed
+                                </button>
+
+                            </form>
+
+                            <form th:action="@{/student/complaints/{id}/reject(id=${complaint.id})}"
+                                  method="post">
+
+                                <button type="submit" class="reject-btn">
+                                    ✕ No, not fixed
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CARD FOOTER / ESCALATION -->
+                    <div class="card-footer">
+
+                        <div class="reported-label"
+                             th:if="${complaint.escalated}">
+                            <span>✓</span>
+                            Reported to admin
+                        </div>
+
+                        <form th:if="${!complaint.escalated
+                                and complaint.status.name() != 'RESOLVED'
+                                and complaint.status.name() != 'RESOLUTION_PENDING_CONFIRMATION'}"
+                              th:action="@{/student/complaints/{id}/escalate(id=${complaint.id})}"
+                              method="post">
+
+                            <button type="submit" class="report-btn">
+                                Report to Admin →
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+        <footer class="dashboard-footer">
+            HostelCare <span>·</span> Student Portal
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- IMAGE MODAL -->
+<div id="imageModal"
+     class="image-modal"
+     onclick="closeImageModal()">
+
+    <button type="button"
+            class="modal-close"
+            onclick="closeImageModal()"
+            aria-label="Close image">
+        &times;
+    </button>
+
+    <div class="modal-content" onclick="event.stopPropagation()">
+
+        <img id="modalImage"
+             src=""
+             alt="Full size resolution proof">
+
+        <p>Resolution proof</p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function openImageModal(imageSrc) {
+
+        const modal = document.getElementById("imageModal");
+        const modalImage = document.getElementById("modalImage");
+
+        modalImage.src = imageSrc;
+        modal.style.display = "flex";
+
+        document.body.style.overflow = "hidden";
+    }
+
+
+    function closeImageModal() {
+
+        const modal = document.getElementById("imageModal");
+
+        modal.style.display = "none";
+
+        document.getElementById("modalImage").src = "";
+
+        document.body.style.overflow = "";
+    }
+
+
+    // Close modal using Escape key
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+            closeImageModal();
+        }
+
+    });
+
+</script>
 
 </body>
 </html>

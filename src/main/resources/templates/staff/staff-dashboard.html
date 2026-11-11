@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/staff/staff-dashboard.css}">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- Header -->
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">H</div>
+            <div>
+                <h2>HostelCare</h2>
+                <span>Staff Portal</span>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <span class="staff-label">Staff Dashboard</span>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-button">
+                    <span>↗</span> Logout
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+        <section class="page-heading">
+            <div>
+                <p class="eyebrow">WORKSPACE / COMPLAINTS</p>
+                <h1>Department Complaints</h1>
+                <p class="page-description">
+                    Review pending complaints from students in your department
+                    and claim the issues you can resolve.
+                </p>
+            </div>
+
+            <div class="heading-decoration">
+                <span class="decoration-dot"></span>
+                Staff Workspace
+            </div>
+        </section>
+
+        <!-- Navigation links -->
+        <section class="quick-links">
+            <a th:href="@{/staff/my-complaints}" class="quick-link">
+                <span class="quick-link-icon">✓</span>
+                <span>
+                    <strong>My Claimed Complaints</strong>
+                    <small>Track complaints assigned to you</small>
+                </span>
+                <span class="link-arrow">→</span>
+            </a>
+
+            <a th:href="@{/staff/escalations}" class="quick-link escalation-link">
+                <span class="quick-link-icon">!</span>
+                <span>
+                    <strong>View Escalated Complaints</strong>
+                    <small>Review complaints requiring attention</small>
+                </span>
+                <span class="link-arrow">→</span>
+            </a>
+        </section>
+
+        <!-- Complaints section -->
+        <section class="complaints-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Pending Complaints</h2>
+                    <p>Complaints available for you to claim</p>
+                </div>
+
+                <span class="section-tag">Pending Queue</span>
+            </div>
+
+            <!-- Empty state -->
+            <div class="empty-state"
+                 th:if="${#lists.isEmpty(complaints)}">
+
+                <div class="empty-icon">✓</div>
+                <h3>You're all caught up!</h3>
+                <p>
+                    There are no pending complaints in your department
+                    right now. Check back later for new submissions.
+                </p>
+            </div>
+
+            <!-- Complaints table -->
+            <div class="table-wrapper"
+                 th:if="${!#lists.isEmpty(complaints)}">
+
+                <table class="complaints-table">
+                    <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Image</th>
+                        <th>Submitted By</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="complaint : ${complaints}">
+
+                        <td class="description-cell">
+                            <span th:text="${complaint.description}"></span>
+                        </td>
+
+                        <td>
+                            <span class="category-label"
+                                  th:text="${complaint.category.name}">
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="status-badge"
+                                  th:text="${complaint.status}">
+                            </span>
+                        </td>
+
+                        <td class="image-cell">
+                            <button
+                                    th:if="${complaint.imagePath != null}"
+                                    type="button"
+                                    class="image-preview-button"
+                                    th:attr="data-image=@{'/' + ${complaint.imagePath}}"
+                                    onclick="openImageModal(this.dataset.image)">
+
+                                <img
+                                        th:src="@{'/' + ${complaint.imagePath}}"
+                                        alt="Complaint photo"
+                                        class="thumbnail">
+                                <span>View</span>
+                            </button>
+
+                            <span class="no-image"
+                                  th:if="${complaint.imagePath == null}">
+                                No image
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="student-info">
+                                <strong th:text="${complaint.student.user.name}"></strong>
+                                <span th:text="${complaint.student.user.phone}"></span>
+                                <small>
+                                    <span th:text="${complaint.student.hostel.name}"></span>
+                                    · Room
+                                    <span th:text="${complaint.student.roomNumber}"></span>
+                                </small>
+                            </div>
+                        </td>
+
+                        <td>
+                            <form
+                                    th:action="@{/staff/complaints/{id}/claim(id=${complaint.id})}"
+                                    method="post">
+
+                                <button type="submit" class="claim-button">
+                                    Claim Complaint
+                                    <span>→</span>
+                                </button>
+                            </form>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <footer class="dashboard-footer">
+            <span>HostelCare · Staff Portal</span>
+            <span>Manage complaints. Improve hostel life.</span>
+        </footer>
+
+    </main>
+</div>
+
+<!-- Image preview modal -->
+<div id="imageModal"
+     class="image-modal"
+     onclick="closeImageModal()">
+
+    <div class="modal-content" onclick="event.stopPropagation()">
+
+        <button type="button"
+                class="modal-close"
+                onclick="closeImageModal()"
+                aria-label="Close image preview">
+            &times;
+        </button>
+
+        <img id="modalImage"
+             src=""
+             alt="Full size complaint photo">
+
+        <p>Complaint Image</p>
+    </div>
+</div>
+
+<script>
+    function openImageModal(imageSrc) {
+        document.getElementById("modalImage").src = imageSrc;
+        document.getElementById("imageModal").style.display = "flex";
+    }
+
+    function closeImageModal() {
+        document.getElementById("imageModal").style.display = "none";
+    }
+</script>
+
+</body>
+</html>

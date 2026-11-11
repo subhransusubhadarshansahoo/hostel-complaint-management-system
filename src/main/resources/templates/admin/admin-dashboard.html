@@ -1,15 +1,288 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Hostel Management</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin/dashboard/admin-dashboard.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
 
-<h1>Admin Dashboard</h1>
+<div class="dashboard-container">
 
-<p>Welcome, Admin!</p>
+    <!-- HEADER -->
+    <header class="top-header">
 
-<a th:href="@{/logout}">Logout</a>
+        <div class="header-left">
+            <div class="brand-icon">H</div>
+
+            <div>
+                <h1>Hostel Management</h1>
+                <p>Administration / Dashboard</p>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="system-status">
+                <span class="status-dot"></span>
+                System Overview
+            </div>
+
+            <div th:replace="~{fragments/logout-button :: logoutButton}"></div>
+        </div>
+
+    </header>
+
+
+    <main class="main-content">
+
+        <!-- PAGE INTRO -->
+        <section class="page-intro">
+
+            <div>
+                <span class="eyebrow">ADMINISTRATION</span>
+                <h2>Dashboard Overview</h2>
+                <p>
+                    Monitor hostel operations, staff activity
+                    and complaint resolution.
+                </p>
+            </div>
+
+        </section>
+
+
+
+        <section class="metrics-section">
+
+            <div class="section-heading">
+                <div>
+                    <h3>Quick Overview</h3>
+                    <p>Key statistics across your hostel system</p>
+                </div>
+            </div>
+
+
+            <div class="metrics-grid">
+
+                <a th:href="@{/admin/departments}"
+                   class="metric-card metric-purple">
+
+                    <div class="metric-top">
+                        <span class="metric-icon">🏢</span>
+                        <span class="metric-label">Departments</span>
+                    </div>
+
+                    <strong th:text="${departmentCount}">0</strong>
+                    <span class="metric-description">Active departments</span>
+
+                </a>
+
+
+                <a th:href="@{/admin/hostels}"
+                   class="metric-card metric-blue">
+
+                    <div class="metric-top">
+                        <span class="metric-icon">🏠</span>
+                        <span class="metric-label">Hostels</span>
+                    </div>
+
+                    <strong th:text="${hostelCount}">0</strong>
+                    <span class="metric-description">Registered hostels</span>
+
+                </a>
+
+
+                <a th:href="@{/admin/categories}"
+                   class="metric-card metric-orange">
+
+                    <div class="metric-top">
+                        <span class="metric-icon">🏷️</span>
+                        <span class="metric-label">Categories</span>
+                    </div>
+
+                    <strong th:text="${categoryCount}">0</strong>
+                    <span class="metric-description">Complaint categories</span>
+
+                </a>
+
+
+                <a th:href="@{/admin/staff}"
+                   class="metric-card metric-green">
+
+                    <div class="metric-top">
+                        <span class="metric-icon">👥</span>
+                        <span class="metric-label">Staff Members</span>
+                    </div>
+
+                    <strong th:text="${staffCount}">0</strong>
+                    <span class="metric-description">Registered staff</span>
+
+                </a>
+
+
+                <a th:href="@{/admin/escalated-complaints}"
+                   class="metric-card metric-red">
+
+                    <div class="metric-top">
+                        <span class="metric-icon">🚨</span>
+                        <span class="metric-label">Escalated</span>
+                    </div>
+
+                    <strong th:text="${escalatedCount}">0</strong>
+                    <span class="metric-description">Require attention</span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- DEPARTMENT PERFORMANCE -->
+        <section class="department-section">
+
+            <div class="section-heading department-heading">
+
+                <div>
+                    <h3>Department Performance</h3>
+                    <p>Complaint statistics and resolution progress</p>
+                </div>
+
+                <span class="live-label">
+                    <span class="status-dot"></span>
+                    Active Departments
+                </span>
+
+            </div>
+
+
+            <!-- EMPTY STATE -->
+            <div th:if="${#lists.isEmpty(departmentStats)}"
+                 class="empty-state">
+
+                <span>📂</span>
+                <h4>No departments available</h4>
+                <p>
+                    Add an active department to view its performance statistics.
+                </p>
+
+            </div>
+
+
+            <!-- DEPARTMENT TABLE -->
+            <div th:unless="${#lists.isEmpty(departmentStats)}"
+                 class="department-table-wrapper">
+
+                <div class="department-table">
+
+                    <!-- TABLE HEADER -->
+                    <div class="table-header">
+
+                        <div>DEPARTMENT</div>
+                        <div>STAFF</div>
+                        <div>TOTAL</div>
+                        <div>PENDING</div>
+                        <div>RESOLVED</div>
+                        <div>RESOLUTION RATE</div>
+
+                    </div>
+
+
+                    <!-- TABLE ROWS -->
+                    <div class="table-row"
+                         th:each="d : ${departmentStats}">
+
+                        <div class="department-name">
+
+                            <div class="department-avatar">
+                                <span>🏢</span>
+                            </div>
+
+                            <div>
+                                <strong th:text="${d.departmentName}">
+                                    Electrical
+                                </strong>
+
+                                <small>Department</small>
+                            </div>
+
+                        </div>
+
+
+                        <div class="table-value">
+                            <span class="mobile-label">Staff</span>
+                            <strong th:text="${d.staffCount}">0</strong>
+                        </div>
+
+
+                        <div class="table-value">
+                            <span class="mobile-label">Total</span>
+                            <strong th:text="${d.totalComplaints}">0</strong>
+                        </div>
+
+
+                        <div class="table-value pending-value">
+                            <span class="mobile-label">Pending</span>
+                            <strong th:text="${d.pendingCount}">0</strong>
+                        </div>
+
+
+                        <div class="table-value resolved-value">
+                            <span class="mobile-label">Resolved</span>
+                            <strong th:text="${d.resolvedCount}">0</strong>
+                        </div>
+
+
+                        <div class="resolution-cell">
+
+                            <div class="resolution-info">
+
+                                <strong th:text="${d.resolutionPercent} + '%'">
+                                    0%
+                                </strong>
+
+                                <span>Completed</span>
+
+                            </div>
+
+                            <div class="progress-track">
+
+                                <div class="progress-fill"
+                                     th:style="'width:' + ${d.resolutionPercent} + '%'">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+        <p>Hostel Management System <span>•</span> Admin Panel</p>
+    </footer>
+
+</div>
 
 </body>
 </html>

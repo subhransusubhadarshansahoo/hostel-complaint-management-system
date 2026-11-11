@@ -46,4 +46,21 @@ public class Complaint {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+
+
+    @Column(name = "resolution_image_path")
+    private String resolutionImagePath;
+
+
+
+    @Column(nullable = false)
+    private boolean escalated = false;
+
+    @Column(name = "admin_warning")
+    private String adminWarning;
+
+
+    @Version
+    private Long version;
 }

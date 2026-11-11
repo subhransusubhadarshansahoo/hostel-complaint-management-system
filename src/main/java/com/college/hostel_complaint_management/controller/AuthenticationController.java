@@ -95,7 +95,7 @@ public class AuthenticationController {
 
 
     public List<Hostel> getHostelInfo() {
-        return hostelRepository.findAll();
+        return hostelRepository.findByActiveTrue();
 
 
     }

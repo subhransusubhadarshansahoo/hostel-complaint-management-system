@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Escalated Complaints</title>
+
+    <link rel="stylesheet" th:href="@{/css/staff/escalated-complaints.css}">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- Header -->
+    <header class="topbar">
+
+        <a th:href="@{/staff/dashboard}" class="brand">
+            <div class="brand-icon">H</div>
+            <div>
+                <h2>HostelCare</h2>
+                <span>Staff Portal</span>
+            </div>
+        </a>
+
+        <div class="header-actions">
+            <span class="staff-label">Escalation Centre</span>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-button">
+                    <span>↗</span> Logout
+                </button>
+            </form>
+        </div>
+
+    </header>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+        <section class="page-heading">
+
+            <div>
+                <p class="eyebrow">WORKSPACE / ESCALATIONS</p>
+
+                <h1>Escalated Complaints</h1>
+
+                <p class="page-description">
+                    Review complaints that require additional attention.
+                    Check the admin's note and take the necessary action
+                    to resolve each issue.
+                </p>
+            </div>
+
+            <a th:href="@{/staff/dashboard}" class="back-button">
+                <span>←</span> Back to Dashboard
+            </a>
+
+        </section>
+
+        <!-- Escalation information -->
+        <section class="notice-banner">
+            <div class="notice-icon">!</div>
+
+            <div>
+                <strong>Requires your attention</strong>
+                <p>
+                    These complaints have been escalated for follow-up.
+                    Review the admin note before taking action.
+                </p>
+            </div>
+        </section>
+
+        <!-- Empty state -->
+        <section class="empty-state"
+                 th:if="${#lists.isEmpty(complaints)}">
+
+            <div class="empty-icon">✓</div>
+
+            <h2>No escalated complaints</h2>
+
+            <p>
+                There are no escalated complaints in your department
+                right now. Keep up the good work!
+            </p>
+
+            <a th:href="@{/staff/dashboard}" class="primary-button">
+                Return to Dashboard
+                <span>→</span>
+            </a>
+
+        </section>
+
+        <!-- Escalated complaint cards -->
+        <section class="complaint-list"
+                 th:if="${!#lists.isEmpty(complaints)}">
+
+            <article class="complaint-card"
+                     th:each="complaint : ${complaints}">
+
+                <div class="card-top">
+
+                    <div>
+                        <span class="card-label">ESCALATED COMPLAINT</span>
+                        <h2 class="complaint-title"
+                            th:text="${complaint.description}">
+                        </h2>
+                    </div>
+
+                    <span class="status-badge"
+                          th:text="${complaint.status}">
+                    </span>
+
+                </div>
+
+                <div class="card-divider"></div>
+
+                <!-- Student details -->
+                <div class="details-grid">
+
+                    <div class="detail-item">
+                        <span class="detail-label">STUDENT NAME</span>
+                        <strong th:text="${complaint.student.user.name}"></strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">PHONE NUMBER</span>
+                        <strong th:text="${complaint.student.user.phone}"></strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">HOSTEL</span>
+                        <strong th:text="${complaint.student.hostel.name}"></strong>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">ROOM NUMBER</span>
+                        <strong th:text="${complaint.student.roomNumber}"></strong>
+                    </div>
+
+                </div>
+
+                <!-- Admin warning -->
+                <div class="admin-note">
+
+                    <div class="note-heading">
+                        <span class="note-icon">!</span>
+                        <strong>Admin's Note</strong>
+                    </div>
+
+                    <p th:text="${complaint.adminWarning}"></p>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="card-actions">
+
+                    <a th:if="${complaint.status.name() == 'ASSIGNED'}"
+                       th:href="@{/staff/complaints/{id}/resolve(id=${complaint.id})}"
+                       class="resolve-button">
+
+                        Resolve Complaint
+                        <span>→</span>
+
+                    </a>
+
+                    <form th:if="${complaint.status.name() == 'PENDING'}"
+                          th:action="@{/staff/complaints/{id}/claim(id=${complaint.id})}"
+                          method="post">
+
+                        <button type="submit" class="claim-button">
+                            Claim Complaint
+                            <span>→</span>
+                        </button>
+
+                    </form>
+
+                    <span th:if="${complaint.status.name() != 'PENDING'
+                                  and complaint.status.name() != 'ASSIGNED'}"
+                          class="no-action-message">
+                        No action available for this status
+                    </span>
+
+                </div>
+
+            </article>
+
+        </section>
+
+        <footer class="dashboard-footer">
+            <span>HostelCare · Staff Portal</span>
+            <span>Manage complaints. Improve hostel life.</span>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

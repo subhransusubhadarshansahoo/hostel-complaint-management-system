@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escalated Complaints</title>
+    <link rel="stylesheet" th:href="@{/css/admin/complaint/escalated-complaints.css}">
+</head>
+<body>
+
+<div class="page-container">
+
+    <div class="page-header">
+        <div>
+            <a th:href="@{/admin/dashboard}" class="back-link">← Back to Dashboard</a>
+            <h1>Escalated Complaints</h1>
+            <p>Complaints reported by students that need review before being forwarded to departments.</p>
+        </div>
+    </div>
+
+    <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
+
+    <div th:if="${#lists.isEmpty(complaints)}" class="empty-state">
+        No escalated complaints right now.
+    </div>
+
+    <div class="complaint-grid" th:if="${!#lists.isEmpty(complaints)}">
+
+        <div th:each="complaint : ${complaints}" class="complaint-card">
+
+            <div class="complaint-top">
+                <span class="category-tag" th:text="${complaint.category.name}"></span>
+                <span class="dept-tag" th:text="${complaint.category.department.name}"></span>
+            </div>
+
+            <p class="description" th:text="${complaint.description}"></p>
+
+            <div class="meta-row">
+                <span><strong>Student:</strong> <span th:text="${complaint.student.user.name}"></span></span>
+                <span><strong>Phone:</strong> <span th:text="${complaint.student.user.phone}"></span></span>
+            </div>
+
+            <div class="meta-row">
+                <span><strong>Status:</strong>
+                    <span class="status" th:text="${complaint.status}"></span>
+                </span>
+                <span><strong>Reported on:</strong>
+                    <span th:text="${#temporals.format(complaint.createdAt, 'dd MMM yyyy, hh:mm a')}"></span>
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="forward-panel" th:if="${!#lists.isEmpty(complaints)}">
+        <h3>Forward all of the above to their departments</h3>
+        <form th:action="@{/admin/escalated-complaints/forward}" method="post">
+            <textarea name="warningMessage" rows="3"
+                      placeholder="Write a message to forward to the relevant departments..."></textarea>
+            <button type="submit" class="submit-btn">Forward All to Departments</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+
+</html>

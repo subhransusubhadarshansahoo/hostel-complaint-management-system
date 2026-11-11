@@ -1,41 +1,236 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | HostelCare</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<h2>Hostel Complaint Management System</h2>
+<div class="login-page">
 
-<h3>Login</h3>
 
-<!-- Success Message -->
-<div th:if="${success}">
-    <p th:text="${success}"></p>
+    <section class="brand-section">
+
+        <div class="brand-header">
+            <div class="brand-logo">H<span>.</span></div>
+            <span class="brand-name">HostelCare</span>
+        </div>
+
+        <div class="brand-content">
+            <div class="eyebrow">
+                <span class="eyebrow-line"></span>
+                YOUR CAMPUS. YOUR VOICE.
+            </div>
+
+            <h1>
+                A better hostel
+                experience
+                <span>starts here.</span>
+            </h1>
+
+            <p>
+                Report issues, track complaints, and stay updated.
+                Making hostel life simpler, one complaint at a time.
+            </p>
+
+            <div class="illustration">
+
+                <div class="illustration-circle circle-one"></div>
+                <div class="illustration-circle circle-two"></div>
+
+                <div class="floating-card card-back">
+                    <div class="mini-icon">✓</div>
+                    <div>
+                        <div class="mini-title">Complaint resolved</div>
+                        <div class="mini-subtitle">Your issue has been handled</div>
+                    </div>
+                </div>
+
+                <div class="main-illustration-card">
+                    <div class="illustration-top">
+                        <span>COMPLAINT STATUS</span>
+                        <span class="status-dot"></span>
+                    </div>
+
+                    <div class="illustration-heading">
+                        Maintenance request
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-value"></div>
+                    </div>
+
+                    <div class="illustration-bottom">
+                        <span>Submitted</span>
+                        <span>In progress</span>
+                        <span>Resolved</span>
+                    </div>
+                </div>
+
+                <div class="floating-card card-front">
+                    <div class="orange-icon">↗</div>
+                    <div>
+                        <div class="mini-title">Stay informed</div>
+                        <div class="mini-subtitle">Track every update</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="brand-footer">
+            <span>© 2026 HostelCare</span>
+            <span>MADE FOR BETTER CAMPUS LIVING</span>
+        </div>
+
+    </section>
+
+
+
+    <section class="form-section">
+
+        <div class="form-top">
+            <span>WELCOME BACK</span>
+            <div class="top-indicator">
+                <span></span> Secure access
+            </div>
+        </div>
+
+        <div class="login-content">
+
+            <div class="form-heading">
+                <div class="heading-mark"></div>
+                <h2>Sign in<span>.</span></h2>
+                <p>Enter your account details to continue.</p>
+            </div>
+
+            <!-- LOGIN ERROR -->
+            <div class="alert alert-error" th:if="${param.error}">
+                <span class="alert-icon">!</span>
+                <span>Invalid email or password. Please try again.</span>
+            </div>
+
+            <!-- LOGOUT SUCCESS -->
+            <div class="alert alert-success" th:if="${param.logout}">
+                <span class="alert-icon">✓</span>
+                <span>You have been logged out successfully.</span>
+            </div>
+
+            <form th:action="@{/login}" method="post">
+
+                <div class="form-group">
+                    <label for="username">EMAIL ADDRESS</label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="5" width="18" height="14" rx="3"
+                                      stroke="currentColor" stroke-width="1.6"/>
+                                <path d="m4 7 8 6 8-6"
+                                      stroke="currentColor" stroke-width="1.6"
+                                      stroke-linecap="round"/>
+                            </svg>
+                        </span>
+
+                        <input
+                                type="email"
+                                id="username"
+                                name="username"
+                                placeholder="you@example.com"
+                                autocomplete="username"
+                                required>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="password">PASSWORD</label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="4" y="10" width="16" height="11"
+                                      rx="3" stroke="currentColor"
+                                      stroke-width="1.6"/>
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"
+                                      stroke="currentColor"
+                                      stroke-width="1.6"
+                                      stroke-linecap="round"/>
+                                <circle cx="12" cy="15" r="1.2"
+                                        fill="currentColor"/>
+                            </svg>
+                        </span>
+
+                        <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required>
+
+                        <button type="button" class="password-toggle"
+                                id="togglePassword" aria-label="Show password">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                                      stroke="currentColor" stroke-width="1.6"/>
+                                <circle cx="12" cy="12" r="2.5"
+                                        stroke="currentColor" stroke-width="1.6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="login-button">
+                    <span>Sign in to your account</span>
+                    <span class="button-arrow">→</span>
+                </button>
+
+            </form>
+
+            <div class="register-prompt">
+                <span>Don't have an account?</span>
+                <a th:href="@{/register}">Create an account</a>
+            </div>
+
+            <div class="security-note">
+                <span class="security-icon">✳</span>
+                Your information is protected with secure authentication.
+            </div>
+
+        </div>
+
+        <div class="form-footer">
+            <span>HOSTEL MANAGEMENT SYSTEM</span>
+            <span>ACCESS PORTAL / 01</span>
+        </div>
+
+    </section>
+
 </div>
 
+<script>
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
 
-<div th:if="${param.error}">
-  <b> Invalid email/password</b>
-</div>
+    togglePassword.addEventListener("click", function () {
+        const isPassword = passwordInput.type === "password";
 
-<form th:action="@{/login}" method="post">
-
-    <label>Email</label><br>
-    <input type="email" name="username" required><br><br>
-
-    <label>Password</label><br>
-    <input type="password" name="password" required><br><br>
-
-    <button type="submit">Login</button>
-
-</form>
-<br>
-
-<p>
-    Don't have an account?
-    <a th:href="@{/register}">Sign Up</a>
-</p>
+        passwordInput.type = isPassword ? "text" : "password";
+        togglePassword.setAttribute(
+            "aria-label",
+            isPassword ? "Hide password" : "Show password"
+        );
+    });
+</script>
 
 </body>
 </html>

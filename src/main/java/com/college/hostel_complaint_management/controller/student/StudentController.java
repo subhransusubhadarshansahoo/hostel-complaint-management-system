@@ -1,4 +1,4 @@
-package com.college.hostel_complaint_management.controller;
+package com.college.hostel_complaint_management.controller.student;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/student")
 public class StudentController {
 
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "student/student-dashboard";
-    }
+//    @GetMapping("/dashboard")
+//    public String dashboard() {
+//        return "student/student-dashboard";
+//    }
 }

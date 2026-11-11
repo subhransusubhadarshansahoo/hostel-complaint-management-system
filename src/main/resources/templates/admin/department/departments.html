@@ -1,118 +1,218 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Department Management</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 30px;
-            background-color: #f5f6f8;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            padding: 40px 24px;
         }
 
         .container {
-            max-width: 1000px;
-            margin: auto;
+            max-width: 1050px;
+            margin: 0 auto;
         }
 
-        .header {
+        /* Top Bar */
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 24px;
         }
 
-        .header h1 {
-            margin: 0;
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
-        .add-btn {
-            text-decoration: none;
-            background-color: #2563eb;
-            color: white;
-            padding: 10px 16px;
+        .header-left h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        /* Modern Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
             border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.15s ease;
         }
 
-        .table-container {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        .back-btn:hover {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            border-color: #94a3b8;
+        }
+
+        /* Primary Action Button */
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #2563eb;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 9px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.15s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .add-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Success Alert */
+        .alert-success {
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Table Card */
+        .table-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 14px;
             text-align: left;
-            border-bottom: 1px solid #e5e7eb;
         }
 
         th {
-            background-color: #f9fafb;
+            background-color: #f8fafc;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 14px 20px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .active {
-            color: #15803d;
-            font-weight: bold;
+        td {
+            padding: 14px 20px;
+            font-size: 14px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
         }
 
-        .disabled {
-            color: #dc2626;
-            font-weight: bold;
+        tbody tr:last-child td {
+            border-bottom: none;
         }
 
-        .success {
-            margin-bottom: 20px;
-            padding: 12px;
+        tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-active {
             background-color: #dcfce7;
-            color: #166534;
-            border-radius: 6px;
+            color: #15803d;
         }
 
+        .badge-disabled {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
 
-
+        /* Actions Cell */
         .actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
 
-.edit-btn,
-.actions button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 14px;
-}
+        .action-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+        }
 
-.edit-btn {
-    background-color: #2563eb;
-    color: white;
-}
+        .btn-edit {
+            background-color: #ffffff;
+            color: #2563eb;
+            border-color: #bfdbfe;
+        }
 
-.deactivate-btn {
-    background-color: #dc2626;
-    color: white;
-}
+        .btn-edit:hover {
+            background-color: #eff6ff;
+            border-color: #93c5fd;
+        }
 
-.activate-btn {
-    background-color: #15803d;
-    color: white;
-}
+        .btn-deactivate {
+            background-color: #fff1f2;
+            color: #e11d48;
+            border-color: #fecdd3;
+        }
+
+        .btn-deactivate:hover {
+            background-color: #ffe4e6;
+        }
+
+        .btn-activate {
+            background-color: #f0fdf4;
+            color: #16a34a;
+            border-color: #bbf7d0;
+        }
+
+        .btn-activate:hover {
+            background-color: #dcfce7;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #94a3b8;
+            padding: 32px 20px;
+            font-style: italic;
+        }
     </style>
 </head>
 
@@ -120,85 +220,79 @@
 
 <div class="container">
 
-    <div class="header">
-        <h1>Departments</h1>
+    <div class="top-bar">
+        <div class="header-left">
+            <!-- Back Button styled as a clean secondary pill/button -->
+            <a th:href="@{/admin/dashboard}" class="back-btn">
+                ← Back
+            </a>
+            <h1>Departments</h1>
+        </div>
 
         <a th:href="@{/admin/departments/new}" class="add-btn">
             + Add Department
         </a>
     </div>
 
+    <!-- Feedback Message -->
     <div th:if="${successMessage}"
-         class="success"
+         class="alert-success"
          th:text="${successMessage}">
     </div>
 
-    <div class="table-container">
-
+    <!-- Table Container -->
+    <div class="table-card">
         <table>
-
             <thead>
             <tr>
-                <th>ID</th>
+                <th style="width: 80px;">ID</th>
                 <th>Department</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th style="width: 140px;">Status</th>
+                <th style="width: 180px;">Actions</th>
             </tr>
             </thead>
-
             <tbody>
-
             <tr th:each="department : ${departments}">
-
                 <td th:text="${department.id}"></td>
-
-                <td th:text="${department.name}"></td>
-
+                <td style="font-weight: 500; color: #0f172a;" th:text="${department.name}"></td>
                 <td>
-                    <span
-                            th:text="${department.active ? 'Active' : 'Disabled'}"
-                            th:class="${department.active ? 'active' : 'disabled'}">
-                    </span>
+                        <span class="badge"
+                              th:classappend="${department.active} ? 'badge-active' : 'badge-disabled'"
+                              th:text="${department.active ? 'Active' : 'Disabled'}">
+                        </span>
                 </td>
+                <td>
+                    <div class="actions">
+                        <!-- Edit -->
+                        <a th:href="@{/admin/departments/{id}/edit(id=${department.id})}"
+                           class="action-btn btn-edit">
+                            Edit
+                        </a>
 
-                <td class="actions">
-
-                  <!--Edit-->
-                    <a th:href="@{/admin/departments/{id}/edit(id=${department.id})}"
-                       class="edit-btn">
-                        Edit
-                    </a>
-
-                    <!-- Activate / Deactivate -->
-                    <form th:action="@{/admin/departments/{id}/toggle(id=${department.id})}"
-                          method="post"
-                          style="display: inline;">
-
-                        <button type="submit"
-                                th:text="${department.active ? 'Deactivate' : 'Activate'}"
-                                th:class="${department.active ? 'deactivate-btn' : 'activate-btn'}">
-                        </button>
-
-                    </form>
-
+                        <!-- Activate / Deactivate -->
+                        <form th:action="@{/admin/departments/{id}/toggle(id=${department.id})}"
+                              method="post"
+                              style="margin: 0;">
+                            <button type="submit"
+                                    class="action-btn"
+                                    th:classappend="${department.active} ? 'btn-deactivate' : 'btn-activate'"
+                                    th:text="${department.active ? 'Deactivate' : 'Activate'}">
+                            </button>
+                        </form>
+                    </div>
                 </td>
-
             </tr>
 
             <tr th:if="${#lists.isEmpty(departments)}">
-                <td colspan="4">
+                <td colspan="4" class="empty-state">
                     No departments found.
                 </td>
             </tr>
-
             </tbody>
-
         </table>
-
     </div>
 
 </div>
 
 </body>
 </html>
-```

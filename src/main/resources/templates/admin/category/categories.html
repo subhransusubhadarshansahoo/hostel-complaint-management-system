@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Complaint Categories</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/admin/category/categories.css}">
+
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <div class="page-header">
+
+        <div>
+            <div th:replace="~{fragments/back-button :: backButton}"></div>
+            <h1>Complaint Categories</h1>
+
+            <p>
+                Manage complaint categories and their departments.
+            </p>
+        </div>
+
+        <a th:href="@{/admin/categories/new}"
+           class="add-btn">
+            + Add Category
+        </a>
+
+    </div>
+
+
+    <!-- Success Message -->
+
+    <div th:if="${successMessage}"
+         class="success-message"
+         th:text="${successMessage}">
+    </div>
+
+
+    <!-- Table -->
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <!-- Empty State -->
+
+            <tr th:if="${#lists.isEmpty(categories)}">
+
+                <td colspan="5"
+                    class="empty-state">
+
+                    No complaint categories found.
+
+                </td>
+
+            </tr>
+
+
+            <!-- Categories -->
+
+            <tr th:each="category : ${categories}">
+
+                <td th:text="${category.id}">
+                </td>
+
+                <td th:text="${category.name}">
+                </td>
+
+                <td th:text="${category.department.name}">
+                </td>
+
+                <td>
+
+                    <span class="status"
+                          th:classappend="${category.active
+                              ? ' status-active'
+                              : ' status-disabled'}"
+                          th:text="${category.active
+                              ? 'Active'
+                              : 'Disabled'}">
+                    </span>
+
+                </td>
+
+                <td class="actions">
+
+                    <a th:href="@{/admin/categories/{id}/edit(
+                            id=${category.id})}"
+                       class="edit-btn">
+                        Edit
+                    </a>
+
+
+                    <form th:action="@{/admin/categories/{id}/toggle(
+                            id=${category.id})}"
+                          method="post">
+
+                        <button type="submit"
+                                th:class="${category.active
+                                    ? 'deactivate-btn'
+                                    : 'activate-btn'}"
+                                th:text="${category.active
+                                    ? 'Deactivate'
+                                    : 'Activate'}">
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,78 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <link rel="stylesheet" th:href="@{/css/register.css}">
 </head>
 <body>
 
-<h2>Student Registration</h2>
+<div class="auth-card">
+    <header class="auth-header">
+        <h2>Student Registration</h2>
+        <p>Hostel Complaint Management System</p>
+    </header>
 
-<form
-        th:action="@{/register}"
-        th:object="${user}"
-        method="post">
+    <form th:action="@{/register}" th:object="${user}" method="post">
 
-    <label>Name:</label><br>
-    <input type="text" th:field="*{name}">
-    <div th:if="${#fields.hasErrors('name')}"
-         th:errors="*{name}"></div>
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="subhransu sahoo">
+            <span class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </div>
 
-    <br><br>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" th:field="*{email}" placeholder="student@example.com">
+            <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        </div>
 
-    <label>Email:</label><br>
-    <input type="email" th:field="*{email}">
-    <div th:if="${#fields.hasErrors('email')}"
-         th:errors="*{email}"></div>
-    <br><br>
+        <div class="form-group">
+            <label for="phoneNo">Phone Number</label>
+            <input type="tel" id="phoneNo" th:field="*{phoneNo}" placeholder="10-digit number">
+            <span class="field-error" th:if="${#fields.hasErrors('phoneNo')}" th:errors="*{phoneNo}"></span>
+        </div>
 
-    <label>Phone Number:</label><br>
-    <input type="text" th:field="*{phoneNo}">
-    <div th:if="${#fields.hasErrors('phoneNo')}"
-         th:errors="*{phoneNo}"></div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" th:field="*{password}">
+                <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
 
-    <br><br>
-    <label>Password:</label><br>
-    <input type="password" th:field="*{password}">
-    <div th:if="${#fields.hasErrors('password')}"
-         th:errors="*{password}"></div>
-    <br><br>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" th:field="*{confirmPassword}">
+                <span class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
+            </div>
+        </div>
 
+        <div class="form-row">
+            <div class="form-group">
+                <label for="hostelId">Hostel</label>
+                <select id="hostelId" th:field="*{hostelId}">
+                    <option value="">Select Hostel</option>
+                    <option th:each="hostel : ${hostels}" th:value="${hostel.id}" th:text="${hostel.name}"></option>
+                </select>
+                <span class="field-error" th:if="${#fields.hasErrors('hostelId')}" th:errors="*{hostelId}"></span>
+            </div>
 
-    <label>confirm password:</label><br>
-    <input type="password" th:field="*{confirmPassword}">
-    <div th:if="${#fields.hasErrors('confirmPassword')}"
-         th:errors="*{confirmPassword}"></div>
-    <br><br>
-    <select th:field="*{hostelId}">
-        <option value="">Select Hostel</option>
+            <div class="form-group">
+                <label for="roomNumber">Room No.</label>
+                <input type="text" id="roomNumber" th:field="*{roomNumber}" placeholder="e.g. B-204">
+                <span class="field-error" th:if="${#fields.hasErrors('roomNumber')}" th:errors="*{roomNumber}"></span>
+            </div>
+        </div>
 
-        <option th:each="hostel : ${hostels}"
-                th:value="${hostel.id}"
-                th:text="${hostel.name}">
-        </option>
-    </select>
-    <div th:if="${#fields.hasErrors('hostelId')}"
-         th:errors="*{hostelId}"></div>
+        <button type="submit" class="btn-submit">Register</button>
+    </form>
 
-    <br><br>
-    <label>Room NO:</label><br>
-   <input type="text" th:field="*{roomNumber}">
-    <div th:if="${#fields.hasErrors('roomNumber')}"
-         th:errors="*{roomNumber}"></div>
-    <br><br>
-
-
-    <button type="submit">
-        Register
-    </button>
-
-</form>
-
-<br>
-
-<a th:href="@{/login}">
-    Already have an account? Login
-</a>
+    <footer class="auth-footer">
+        Already have an account? <a th:href="@{/login}">Login</a>
+    </footer>
+</div>
 
 </body>
 </html>
